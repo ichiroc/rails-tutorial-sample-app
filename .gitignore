@@ -21,3 +21,5 @@
 .byebug_history
 
 spring/*.pid
+
+.DS_Store
