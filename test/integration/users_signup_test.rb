@@ -8,7 +8,6 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
                                          email: "user@invalid",
                                          password:              "foo",
                                          password_confirmation: "bar" } }
-      assert_select 'form[action=?]', signup_path
       assert_select 'div#error_explanation'
       assert_select 'div#error_explanation li', count: 4
       assert_select 'div#error_explanation li', 'Email is invalid'
