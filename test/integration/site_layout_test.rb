@@ -1,8 +1,12 @@
+# coding: utf-8
 # frozen_string_literal: true
 
 require 'test_helper'
 
 class SiteLayoutTest < ActionDispatch::IntegrationTest
+  def setup
+    @user = users(:michael)
+  end
   test 'layout links' do
     get root_path
     assert_template 'static_pages/home'
@@ -11,6 +15,17 @@ class SiteLayoutTest < ActionDispatch::IntegrationTest
     assert_select 'a[href=?]', about_path
     assert_select 'a[href=?]', contact_path
     assert_select 'a[href=?]', signup_path
+
+    # 未ログインでは表示されないリンク
+    assert_select 'a[href=?]', users_path, count: 0
+
+    # ログインしていれば表示されるリンク
+    log_in_as @user
+    get root_path
+    assert_select 'a[href=?]', users_path
+    assert_select 'a[href=?]', edit_user_path(@user)
+    assert_select 'a[href=?]', user_path(@user)
+
     get contact_path
     assert_select 'title', full_title('Contact')
     get signup_path
